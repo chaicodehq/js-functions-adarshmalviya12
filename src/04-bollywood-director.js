@@ -46,12 +46,78 @@
  */
 export function createDialogueWriter(genre) {
   // Your code here
+  if (!["action", "romance", "comedy", "drama"].includes(genre)) {
+    return null;
+  }
+  let dialogue;
+ 
+  return function (hero, villain) {
+    if (!hero || !villain) return "...";
+     switch (genre) {
+    case "action":
+      dialogue = `${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'`;
+      break;
+    case "romance":
+      dialogue = `${hero} whispers: '${villain}, tum mere liye sab kuch ho'`;
+      break;
+    case "comedy":
+      dialogue = `${hero} laughs: '${villain} bhai, kya kar rahe ho yaar!'`
+      break;
+    case "drama":
+      dialogue = `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'`;
+      break;
+    default:
+      return null;
+  }
+    return dialogue;
+  };
 }
 
 export function createTicketPricer(basePrice) {
   // Your code here
+  if(basePrice <= 0){
+    return null;
+  }
+
+  return function(seatType , isWeekend = false){
+    let price ;
+    if(seatType === 'silver'){
+      price = basePrice * 1;
+    }else if(seatType === 'gold'){
+      price = basePrice * 1.5;
+    }else if(seatType === 'platinum'){
+      price = basePrice * 2;
+    }else{
+      return null;
+    }
+
+    if(isWeekend){
+      price = price * 1.3;
+    }
+
+    return Math.round(price);
+  }
+  
 }
 
 export function createRatingCalculator(weights) {
   // Your code here
+  if(typeof weights !== 'object'){
+    return null;
+  }
+
+  return function(scores){
+    const weightedAvgObj = {
+      story : (weights.story * scores.story).toFixed(1),
+      action : (weights.action * scores.action).toFixed(1),
+      direction : (weights.direction * scores.direction).toFixed(1),
+      music : (weights.music * scores.music).toFixed(1),
+    }
+
+    let values = Object.values(weightedAvgObj).reduce((acc,curr) => {
+      return acc + curr;
+    })
+
+   return weightedAvgObj;
+  }
 }

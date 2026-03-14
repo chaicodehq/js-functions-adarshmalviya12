@@ -1,3 +1,5 @@
+import { run } from "jest";
+
 /**
  * 🏏 Cricket Player Stats Dashboard
  *
@@ -38,15 +40,22 @@
  *   // => { name: "Jadeja", strikeRate: 175, economy: 7.5, battingAvg: 28.57, isAllRounder: false }
  */
 export const calcStrikeRate = (runs, balls) => {
-  // Your code here
+  // Your code here 
+  if(balls <= 0 || run <= 0) return 0;
+  const strikeRate = (runs / balls) * 100;
+  return strikeRate.toFixed(2);
 };
 
 export const calcEconomy = (runsConceded, overs) => {
   // Your code here
+  if(runsConceded < 0 || overs <= 0) return 0;
+  const economy = (runsConceded / overs).toFixed(2)
+  return economy
 };
 
 export const calcBattingAvg = (totalRuns, innings, notOuts = 0) => {
   // Your code here
+  
 };
 
 export const isAllRounder = (battingAvg, economy) => {

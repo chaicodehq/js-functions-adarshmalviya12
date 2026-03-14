@@ -41,12 +41,98 @@
  */
 export function createTiffinPlan({ name, mealType = "veg", days = 30 } = {}) {
   // Your code here
+  if(!name || name === '') return null
+
+  let dailyRate;
+  if(mealType == 'veg'){
+    dailyRate = 80
+  }else if(mealType == 'nonveg'){
+    dailyRate = 120;
+  }else if(mealType == 'jain'){
+    dailyRate = 90;
+  }else{
+    return null;
+  }
+
+  const totalCost = dailyRate * days;
+
+  return {
+    name,
+    mealType,
+    days,
+    dailyRate,
+    totalCost
+  }
 }
 
 export function combinePlans(...plans) {
   // Your code here
+
+  let plansArr = plans;
+  console.log(plansArr)
+  
+  if(plansArr.length <= 0) return null;
+  const totalRevenue = plansArr.reduce((acc, curr) => {
+    return acc += curr.totalCost;
+  },0)
+  console.log(totalRevenue)
+
+  let vegCount = 0;
+  let nonVegCount = 0;
+  let jainCount = 0;
+
+  plansArr.forEach((item)=>{
+    if(item.mealType == 'veg'){
+      vegCount = vegCount + 1;
+    }else if(item.mealType === 'nonveg'){
+      nonVegCount = nonVegCount + 1;
+    }else{
+      jainCount = jainCount + 1;
+    }
+  })
+
+  const mealBreakdown = {
+    veg : vegCount,
+    nonveg : nonVegCount,
+    jain : jainCount
+  }
+
+
+  return{
+    totalCustomers : plansArr.length,
+    totalRevenue,
+    mealBreakdown
+  }
+
 }
 
 export function applyAddons(plan, ...addons) {
   // Your code here
+
+  if(plan === null) return null;
+
+  let newPlan = structuredClone(plan);
+  // newPlan.addonNames = [];
+
+  // const addOnsArr = addons;
+  // console.log(addOnsArr)
+  // addOnsArr.forEach((item)=>{
+  //   newPlan.dailyRate = newPlan.dailyRate + item.price;
+  //   newPlan.addonNames.push(item.name)
+  // })
+
+  // newPlan.totalCost = newPlan.days * newPlan.dailyRate;
+
+  const addOnNames = addons.map(item => item.name);
+  const addOnTotal = addons.reduce((acc,curr)=>{
+    return acc += curr.price
+  },0)
+
+  const newDailyRates = newPlan.dailyRate + addOnTotal
+  return {
+    ...newPlan,
+    dailyRate: newDailyRates,
+    addonNames : addOnNames,
+    totalCost : newPlan.days * newDailyRates
+  };
 }
